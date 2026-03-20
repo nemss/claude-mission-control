@@ -10,7 +10,16 @@
       "Bash(npm test*)",
       "Bash(npm run lint*)",
       "Bash(npm run build*)",
-      "Bash(npx tsc --noEmit*)"
+      "Bash(npx tsc --noEmit*)",
+      "Bash(pytest*)",
+      "Bash(python -m pytest*)",
+      "Bash(python3 -m pytest*)",
+      "Bash(go test*)",
+      "Bash(cargo test*)",
+      "Bash(cargo clippy*)",
+      "Bash(make test*)",
+      "Bash(make lint*)",
+      "Bash(bash .claude/hooks/*)"
     ],
     "deny": [
       "Bash(rm -rf *)",
