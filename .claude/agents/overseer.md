@@ -64,9 +64,18 @@ created: YYYY-MM-DDTHH:MM:SSZ
 
 Find the next ID by counting existing files in `queue/`.
 
-### Step 2: Run the builder-oracle loop
+### Step 2: Determine execution order
 
-For each task file created:
+Before running the loop, classify tasks:
+
+- **Independent tasks** (different files, no shared state, no dependency between them) → run in **parallel** by spawning multiple Builder agents simultaneously
+- **Dependent tasks** (one needs the output of another, or they touch the same files) → run **sequentially**, one after another
+
+When running parallel tasks, spawn multiple Builder agents in a single message (multiple Agent tool calls). Each Builder reads its own task file. After all Builders finish, spawn Oracle for each task.
+
+### Step 3: Run the builder-oracle loop
+
+For each task file created (or batch of independent tasks):
 
 1. **Spawn Builder** — tell it to read the task from queue:
 ```
