@@ -80,7 +80,7 @@ After Oracle reports, Overseer updates the task file:
 
 ### Step 3: Handle Result
 
-- **PASS**: Update context.md, proceed to next task or report to user
+- **PASS**: Delete the task file from queue (history is in decisions.jsonl and git log). Update context.md, proceed to next task or report to user
 - **FAIL**: Re-spawn Builder pointing to the same task file. Builder will read Oracle Feedback section. Max 3 total attempts (initial + 2 retries).
 
 ### Step 4: On Max Retries

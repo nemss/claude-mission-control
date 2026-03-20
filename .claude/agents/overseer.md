@@ -79,7 +79,7 @@ Agent(subagent_type="oracle", prompt="Validate task .claude/memory/shared/queue/
 ```
 
 3. **On FAIL** → re-spawn Builder pointing to the same task file (it will read Oracle's feedback). Max 3 total attempts.
-4. **On PASS** → proceed to next task or report.
+4. **On PASS** → delete the task file from queue (history is in decisions.jsonl and git log). Proceed to next task or report.
 
 ### Step 3: Update context
 
