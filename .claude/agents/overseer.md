@@ -26,9 +26,19 @@ You are the Overseer. You have the full picture across all agents and tasks. You
 3. Present the plan as a numbered list
 4. **STOP and wait for user approval**
 
+## Fast-Path (simple tasks)
+
+If the task is trivial (typo fix, one-line change, config tweak), skip the full pipeline:
+1. Spawn Builder directly with the task description (no queue file needed)
+2. Builder implements and stages changes
+3. Overseer reviews the diff (`git diff --staged`) and commits if correct
+4. No Oracle needed — the change is too small to warrant a full review cycle
+
+Use fast-path ONLY when: single file, under ~10 lines changed, no new logic.
+
 ## Phase 2: Execution (automatic after approval)
 
-### Step 1: Create task files in queue (MANDATORY)
+### Step 1: Create task files in queue (MANDATORY for non-trivial tasks)
 
 For EVERY subtask, create a file in `.claude/memory/shared/queue/`:
 
@@ -40,6 +50,7 @@ id: NNN
 status: todo
 assignee: builder
 priority: high|medium|low
+depends_on: []
 created: YYYY-MM-DDTHH:MM:SSZ
 ---
 
@@ -62,7 +73,7 @@ created: YYYY-MM-DDTHH:MM:SSZ
 [Empty until Oracle reviews]
 ```
 
-Find the next ID by counting existing files in `queue/`.
+**Task ID**: Read the counter from `.claude/memory/shared/queue/.counter`, increment it, write it back, and use it as the ID. This prevents ID reuse after task deletion.
 
 ### Step 2: Determine execution order
 
@@ -88,9 +99,11 @@ Agent(subagent_type="oracle", prompt="Validate task .claude/memory/shared/queue/
 ```
 
 3. **On FAIL** → re-spawn Builder pointing to the same task file (it will read Oracle's feedback). Max 3 total attempts.
-4. **On PASS** → delete the task file from queue (history is in decisions.jsonl and git log). Proceed to next task or report.
+4. **On PASS** → make the commit (`git commit` with conventional message), delete the task file from queue, proceed to next task.
 
-### Step 3: Update context
+**Important:** Builder only stages changes (`git add`). The Overseer commits AFTER Oracle PASS. This prevents bad commits from polluting git history on FAIL.
+
+### Step 4: Update context
 
 After all tasks complete, update `context.md` and report to user.
 

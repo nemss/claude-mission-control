@@ -7,15 +7,19 @@ dist/
 .claude/memory/shared/sessions/*.md
 .claude/memory/shared/briefs/*.md
 .claude/memory/shared/queue/*.md
-.claude/memory/shared/findings/*.md
 .claude/memory/shared/content/*.md
-.claude/memory/shared/lessons/*.json
+
+# Durable knowledge (tracked in git)
+# findings/ and lessons/ are NOT ignored — they represent project knowledge
 
 # Keep directory structure (via .gitkeep files)
 !.claude/memory/shared/**/.gitkeep
 
-# Context is the one shared memory file that SHOULD be in git
+# Context is shared memory tracked in git
 !.claude/memory/shared/context.md
+
+# Queue counter is tracked in git
+!.claude/memory/shared/queue/.counter
 
 # OS
 .DS_Store

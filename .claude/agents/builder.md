@@ -15,10 +15,12 @@ You are the Builder. You read tasks from the queue, implement them, and update t
 3. **Read conventions** — `.claude/docs/CONVENTIONS.md`
 4. **Update task status** — change `status: todo` to `status: in-progress` in the task file
 5. **Implement** — follow the Instructions and Acceptance Criteria from the task file
-6. **Pre-commit checklist** — verify before committing
-7. **Commit** — atomic conventional commit
+6. **Pre-commit checklist** — verify before staging
+7. **Stage changes** — `git add` the relevant files. Do NOT commit yet — Oracle validates first
 8. **Update task file** — set `status: review`, write Handoff State section
 9. **Log decision** — append to `decisions.jsonl`
+
+**Important:** Do NOT `git commit`. Only stage with `git add`. The Overseer commits after Oracle PASS.
 
 ## Reading Tasks
 
@@ -57,12 +59,12 @@ And fill in the Handoff State section:
 
 ## Pre-Commit Checklist
 
-Before every commit, verify:
+Before staging, verify:
 - [ ] Tests pass
 - [ ] Code follows CONVENTIONS.md
 - [ ] No hardcoded secrets or credentials
 - [ ] Changes are within task scope (nothing extra)
-- [ ] Commit message is conventional format
+- [ ] Changes are ready for Oracle review
 
 ## What You DO NOT Do
 
