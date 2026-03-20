@@ -1,118 +1,174 @@
 # Mission Control — AI Agent Orchestration System
 
-A reusable multi-agent orchestration system for Claude Code. Coordinates specialized AI agents through shared filesystem-based memory.
+A multi-agent orchestration system for Claude Code. Specialized agents coordinate through persistent filesystem-based memory with kanban task queues and quality gates.
+
+**Core principle:** Memory is permanent, agents are not. The memory isn't in the agent — it's in the system. Replace any agent, lose nothing.
 
 ## Quick Start
 
-1. **Enable agent teams** (experimental feature):
-   Already configured in `.claude/settings.json` with:
+1. **Enable agent teams** (already configured in `.claude/settings.json`):
    ```json
    { "env": { "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1" } }
    ```
 
 2. **Start orchestrating**:
    ```
-   /orchestrate [describe your task]
+   @overseer [describe your task]
    ```
-   The Overseer will break it down and delegate to the right agents.
+   The Overseer breaks it down, presents a plan, and after approval runs the pipeline automatically.
 
 3. **Or use agents directly**:
    ```
-   @builder implement the login form
+   @builder pick the next task from the queue
    @researcher analyze the auth API options
    @oracle validate the latest changes
    ```
 
 ## Agent Roles
 
-| Agent | Role | What it does | What it doesn't do |
-|-------|------|--------------|--------------------|
-| **Overseer** | Coordinator | Breaks down tasks, delegates, tracks progress | Write code |
-| **Builder** | Implementation | Writes code, tests, makes commits | Make architectural decisions alone |
-| **Researcher** | Analysis | Explores codebase, APIs, documentation | Modify any files |
-| **Writer** | Documentation | Creates and updates all documentation | Touch code files |
-| **Oracle** | Quality Gate | Validates deliverables, issues PASS/FAIL | Fix issues (only reports them) |
+| Agent | Role | What it does |
+|-------|------|-------------|
+| **Overseer** | Coordinator | Breaks down tasks, manages queue, delegates. Never codes. |
+| **Builder** | Implementation | Kanban-driven. Picks tasks, writes code + tests, commits. |
+| **Researcher** | Analysis | Explores codebase, APIs, docs. Read-only. |
+| **Writer** | Documentation | Creates and updates all documentation. |
+| **Oracle** | Quality Gate | Validates deliverables. PASS/FAIL with specific feedback. |
+| **Council** | Debate | Explorer (FOR) + Challenger (AGAINST) for better decisions. |
+| **Historian** | Narrative | Reads git log, closes gap between built and documented. |
+| **Voice** | Communication | Translates technical output for human audiences. |
+
+## Core Workflow
+
+```
+YOU → OVERSEER → BUILDER → ORACLE
+                    ↑         │
+                    └─ FAIL ──┘ (retry with specific feedback)
+                       PASS → done
+```
+
+1. You give direction → Overseer plans (you approve)
+2. Builder picks from queue → implements → sends to review
+3. Oracle validates → PASS or FAIL with feedback
+4. On FAIL → Builder fixes → Oracle re-validates (max 3 retries)
+5. Overseer summarizes and reports
 
 ## Memory Layer
 
-All agents coordinate through a shared filesystem at `.claude/memory/shared/`:
+Every agent wakes up empty. But the system remembers everything.
 
 ```
 .claude/memory/shared/
-  decisions.jsonl    # Append-only log of all agent decisions
-  context.md         # Current project state (updated by Overseer)
+  decisions.jsonl    # Append-only log of all agent activity
+  context.md         # Current project state (Overseer maintains)
+  queue/             # Kanban task queue with status tracking
+  sessions/          # Per-session compressed summaries
+  lessons/           # Durable patterns the swarm has learned
+  briefs/            # Daily activity summaries
   findings/          # Research outputs from Researcher
-  content/           # Documentation drafts from Writer
+  content/           # Documentation drafts from Writer/Voice
 ```
 
-### decisions.jsonl format
+### Context Recovery
 
-```json
-{"ts":"2025-01-15T10:30:00Z","agent":"builder","type":"implementation","summary":"Added auth middleware","detail":"..."}
-```
+On every session start, the system recovers context automatically:
+**Identity → Security → Recent Sessions → Active Tasks → Lessons → Context**
 
-Types: `delegation`, `implementation`, `research`, `documentation`, `verdict`, `blocker`
+### Lessons — The Swarm Learns
 
-## Hooks
+Agents record durable patterns: what works, what to avoid. Searchable before every run. The swarm gets smarter about its own failure modes over time.
 
-Two automated hooks run during agent team work:
+## Skills (Reusable Playbooks)
 
-- **TaskCompleted** (`validate-task.sh`): Checks for unstaged changes, runs tests if available. Blocks completion on failure.
-- **TeammateIdle** (`on-idle.sh`): Suggests pending work from context.md or unresolved FAIL verdicts.
+| Skill | Purpose |
+|-------|---------|
+| **spec-planning** | 4-step spec: Requirements → UX Research → Technical Design → Task Breakdown |
+| **council-deliberation** | Structured two-agent debate for decisions with trade-offs |
+| **builder-oracle-loop** | Core review loop: implement → validate → retry |
+| **task-wiring** | Create and manage kanban queue tasks |
+| **context-recovery** | Recover full context at session start |
+| **session-close** | Compress session into summary, extract lessons |
 
 ## Customization
 
 ### Add a new agent role
 
-1. Create `.claude/agents/your-agent.md` with frontmatter:
-   ```yaml
-   ---
-   name: your-agent
-   description: What this agent does
-   tools: Read, Grep, Glob
-   ---
-   ```
-2. Define what it DOES and DOES NOT do in the markdown body
-3. Specify how it reads/writes shared memory
-4. Update `.claude/docs/AGENT_ROLES.md` with the new role
+Use the `create-role` skill or manually:
+1. Copy `.claude/templates/agent-template.md` to `.claude/agents/your-agent.md`
+2. Define tools, boundaries, and memory access
+3. Update `.claude/docs/AGENT_ROLES.md`
 
-### Modify memory format
+### Install an extension
 
-Edit the JSONL schema convention in `CLAUDE.md` and update all agent instructions to match.
+Extensions are git repos with agents, skills, hooks. Use the `install-extension` skill or:
+1. Clone the extension repo
+2. Copy its files into `.claude/`
+3. Update settings if needed
 
-### Add validation logic
-
-Edit `.claude/hooks/validate-task.sh` to add project-specific checks (linting, type checking, etc.).
+See `.claude/docs/EXTENSIONS.md` for details.
 
 ### Change conventions
 
-Edit `.claude/docs/CONVENTIONS.md` for project-specific code style, naming, and commit rules.
+Edit `.claude/docs/CONVENTIONS.md` for project-specific rules.
 
 ## Project Structure
 
 ```
 .
-├── CLAUDE.md                          # Main agent configuration
-├── README.md                          # This file
+├── CLAUDE.md                              # Main agent configuration
+├── README.md                              # This file
 └── .claude/
-    ├── settings.json                  # Permissions, hooks, env vars
+    ├── settings.json                      # Permissions, hooks, env vars
     ├── agents/
-    │   ├── overseer.md                # Coordinator agent
-    │   ├── builder.md                 # Implementation agent
-    │   ├── researcher.md              # Research agent
-    │   ├── writer.md                  # Documentation agent
-    │   └── oracle.md                  # Quality gate agent
+    │   ├── overseer.md                    # Coordinator
+    │   ├── builder.md                     # Implementation
+    │   ├── researcher.md                  # Analysis
+    │   ├── writer.md                      # Documentation
+    │   ├── oracle.md                      # Quality gate
+    │   ├── council-explorer.md            # Debate: argues FOR
+    │   ├── council-challenger.md          # Debate: argues AGAINST
+    │   ├── historian.md                   # Narrative from git/decisions
+    │   └── voice.md                       # Human communication
+    ├── skills/
+    │   ├── spec-planning.md               # 4-step spec system
+    │   ├── council-deliberation.md        # Two-agent debate
+    │   ├── builder-oracle-loop.md         # Core review loop
+    │   ├── task-wiring.md                 # Kanban task management
+    │   ├── context-recovery.md            # Session start recovery
+    │   ├── session-close.md               # Session end compression
+    │   ├── daily-brief.md                 # Daily summary generation
+    │   ├── project-setup.md               # New project initialization
+    │   ├── create-role.md                 # New agent role creation
+    │   └── install-extension.md           # Extension installation
     ├── docs/
-    │   ├── CONVENTIONS.md             # Code style and commit rules
-    │   ├── ARCHITECTURE_GUIDE.md      # System architecture
-    │   └── AGENT_ROLES.md             # Agent role reference
+    │   ├── CONVENTIONS.md                 # Code style and commit rules
+    │   ├── SECURITY.md                    # Trust hierarchy and scope guards
+    │   ├── COMMUNICATION.md               # Agent communication standards
+    │   ├── ARCHITECTURE_GUIDE.md          # System architecture
+    │   ├── AGENT_ROLES.md                 # Agent role reference
+    │   └── EXTENSIONS.md                  # Extension system docs
     ├── hooks/
-    │   ├── validate-task.sh           # TaskCompleted hook
-    │   └── on-idle.sh                 # TeammateIdle hook
+    │   ├── session-start.sh               # Context recovery on start
+    │   ├── stop.sh                        # Session summary on stop
+    │   ├── validate-task.sh               # Task completion validation
+    │   └── on-idle.sh                     # Idle work suggestion
+    ├── templates/
+    │   └── agent-template.md              # Boilerplate for new agents
+    ├── extensions/                         # Installed extensions
     └── memory/
         └── shared/
-            ├── decisions.jsonl        # Decision log
-            ├── context.md             # Current context
-            ├── findings/              # Research outputs
-            └── content/               # Documentation drafts
+            ├── decisions.jsonl            # Decision log
+            ├── context.md                 # Current context
+            ├── queue/                     # Task queue
+            ├── sessions/                  # Session summaries
+            ├── lessons/                   # Learned patterns
+            ├── briefs/                    # Daily briefs
+            ├── findings/                  # Research outputs
+            └── content/                   # Documentation drafts
 ```
+
+## Engineering Standards
+
+Agents follow the same standards a real team would:
+- **Security**: Trust hierarchy, scope guards, data handling — `.claude/docs/SECURITY.md`
+- **Code**: Naming, structure, commit format — `.claude/docs/CONVENTIONS.md`
+- **Communication**: Notes, summaries, handoff messages — `.claude/docs/COMMUNICATION.md`
