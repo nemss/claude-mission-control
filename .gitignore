@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+dist/
+
+# Dynamic memory (stays local, not in git)
+.claude/memory/shared/decisions.jsonl
+.claude/memory/shared/sessions/*.md
+.claude/memory/shared/briefs/*.md
+.claude/memory/shared/queue/*.md
+.claude/memory/shared/findings/*.md
+.claude/memory/shared/content/*.md
+.claude/memory/shared/lessons/*.json
+
+# Keep directory structure (via .gitkeep files)
+!.claude/memory/shared/**/.gitkeep
+
+# Context is the one shared memory file that SHOULD be in git
+!.claude/memory/shared/context.md
+
+# OS
+.DS_Store
+
+# Lock files (optional — remove if you want to track)
+package-lock.json
