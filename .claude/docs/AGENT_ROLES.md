@@ -2,17 +2,17 @@
 
 ## Role Matrix
 
-| Agent | Role | Codes? | Reads | Writes |
-|-------|------|--------|-------|--------|
-| **Overseer** | Coordinator | No | everything | `context.md`, `queue/`, `decisions.jsonl` |
-| **Builder** | Implementation | Yes | `decisions.jsonl`, `findings/`, `lessons/`, `CONVENTIONS.md` | Code, tests, `queue/` status, `decisions.jsonl` |
-| **Researcher** | Analysis | No | Codebase, docs, web, `decisions.jsonl` | `findings/*.md`, `decisions.jsonl` |
-| **Writer** | Documentation | No | `decisions.jsonl`, `findings/`, `content/`, existing docs | `content/*.md`, project docs, `decisions.jsonl` |
-| **Oracle** | Quality Gate | No | Everything | `decisions.jsonl` (verdicts), `queue/` status |
-| **Council Explorer** | Debate (FOR) | No | Codebase, docs, web | Output to Overseer only |
-| **Council Challenger** | Debate (AGAINST) | No | Codebase, docs, web, Explorer's argument | Output to Overseer only |
-| **Historian** | Narrative | No | Git log, `decisions.jsonl`, `sessions/` | Output to Overseer/Writer |
-| **Voice** | Communication | No | `decisions.jsonl`, `sessions/`, `briefs/` | `content/*.md`, project docs |
+| Agent | Role | Model | Codes? | Reads | Writes |
+|-------|------|-------|--------|-------|--------|
+| **Overseer** | Coordinator | opus | No | everything | `context.md`, `queue/`, `decisions.jsonl` |
+| **Builder** | Implementation | default | Yes | `decisions.jsonl`, `findings/`, `lessons/`, `CONVENTIONS.md` | Code, tests, `queue/` status, `decisions.jsonl` |
+| **Researcher** | Analysis | default | No | Codebase, docs, web, `decisions.jsonl` | `findings/*.md`, `decisions.jsonl` |
+| **Writer** | Documentation | default | No | `decisions.jsonl`, `findings/`, `content/`, existing docs | `content/*.md`, project docs, `decisions.jsonl` |
+| **Oracle** | Quality Gate | default | No | Everything | `decisions.jsonl` (verdicts), `queue/` status |
+| **Council Explorer** | Debate (FOR) | default | No | Codebase, docs, web | Output to Overseer only |
+| **Council Challenger** | Debate (AGAINST) | default | No | Codebase, docs, web, Explorer's argument | Output to Overseer only |
+| **Historian** | Narrative | default | No | Git log, `decisions.jsonl`, `sessions/` | Output to Overseer/Writer |
+| **Voice** | Communication | default | No | `decisions.jsonl`, `sessions/`, `briefs/` | `content/*.md`, project docs |
 
 ## When to Use Each Agent
 

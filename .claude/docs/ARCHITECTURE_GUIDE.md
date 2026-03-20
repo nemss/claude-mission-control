@@ -91,6 +91,14 @@ Each task file contains: instructions, acceptance criteria, handoff state, manag
 | `validate-task.sh` | TaskCompleted | Check tests, unstaged files |
 | `on-idle.sh` | TeammateIdle | Suggest pending work from queue |
 
+### Hook Failure Recovery
+
+When a hook exits with code 2 (block):
+- **TaskCompleted**: Task stays in current status. Feedback sent to the agent via stderr. Agent should fix the issue and retry.
+- **TeammateIdle**: Agent receives the suggestion and keeps working instead of going idle.
+
+When a hook exits with a non-zero code other than 2, the hook is treated as errored and the action proceeds as if the hook didn't exist. Check hook scripts for syntax errors if this happens.
+
 ## Skills (Reusable Playbooks)
 
 | Skill | Purpose |

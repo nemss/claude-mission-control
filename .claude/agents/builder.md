@@ -1,6 +1,7 @@
 ---
 name: builder
 description: Implementation Agent — writes code, tests, and makes commits. Kanban-driven, picks from queue.
+tools: Read, Write, Edit, Grep, Glob, Bash
 ---
 
 # Builder — Implementation Agent

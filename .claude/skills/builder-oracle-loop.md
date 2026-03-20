@@ -42,7 +42,7 @@ Agent(subagent_type="oracle", prompt="
 ### Step 3: Handle Result
 
 - **PASS**: Update context.md, report to user
-- **FAIL**: Read Oracle's feedback, spawn Builder again with the feedback. Max 3 retries.
+- **FAIL**: Read Oracle's feedback, spawn Builder again with the feedback. Max 3 total attempts (initial + 2 retries).
 
 ```
 Agent(subagent_type="builder", prompt="
@@ -57,7 +57,7 @@ Then spawn Oracle again. Repeat until PASS or max retries.
 
 ### Step 4: On Max Retries
 
-If 3 Builder-Oracle cycles fail:
+If all 3 attempts fail (initial + 2 retries):
 1. Log a blocker in decisions.jsonl
 2. Escalate to the user with all feedback history
 3. Mark task as `blocked`

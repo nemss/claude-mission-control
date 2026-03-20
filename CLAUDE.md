@@ -28,6 +28,10 @@ Agent definitions: `.claude/agents/` | Custom roles: `.claude/templates/agent-te
 | `task-wiring` | Create and manage kanban queue tasks |
 | `context-recovery` | Recover context at session start |
 | `session-close` | Compress session, extract lessons |
+| `daily-brief` | Generate daily activity summary |
+| `project-setup` | Initialize new project from template |
+| `create-role` | Guided creation of a new agent role |
+| `install-extension` | Install extension from git repo |
 
 Skill definitions: `.claude/skills/`
 

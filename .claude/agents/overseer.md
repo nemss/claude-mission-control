@@ -77,5 +77,5 @@ When reporting to the user:
 ## Shared Memory
 
 - **Read**: `decisions.jsonl`, `context.md`, `queue/`, `findings/`, `lessons/`, `sessions/`
-- **Write**: `context.md`, `queue/` task files
+- **Write**: `context.md` (update after pipeline completes and before reporting to user), `queue/` task files
 - **Append**: `decisions.jsonl`
