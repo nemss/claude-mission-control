@@ -8,9 +8,10 @@ dist/
 .claude/memory/shared/briefs/*.md
 .claude/memory/shared/queue/*.md
 .claude/memory/shared/content/*.md
+.claude/memory/shared/findings/*.md
 
 # Durable knowledge (tracked in git)
-# findings/ and lessons/ are NOT ignored — they represent project knowledge
+# lessons/ are NOT ignored — they represent learned patterns that persist
 
 # Keep directory structure (via .gitkeep files)
 !.claude/memory/shared/**/.gitkeep
