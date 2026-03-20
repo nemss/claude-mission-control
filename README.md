@@ -4,6 +4,21 @@ A multi-agent orchestration system for Claude Code. Specialized agents coordinat
 
 **Core principle:** Memory is permanent, agents are not. The memory isn't in the agent — it's in the system. Replace any agent, lose nothing.
 
+## Why Mission Control?
+
+Stock Claude Code is a single agent with no memory between sessions. That works for small tasks. It breaks down on real projects.
+
+| Problem | Stock Claude Code | Mission Control |
+|---------|-------------------|-----------------|
+| **Context loss** | Every session starts blank. You re-explain the project each time. | Persistent shared memory. Agents recover full context on start. |
+| **No coordination** | One agent does everything — planning, coding, reviewing, documenting. | Specialized agents with clear boundaries. Overseer delegates, Builder codes, Oracle reviews. |
+| **No quality gates** | You are the only reviewer. Mistakes ship if you miss them. | Oracle validates every deliverable. PASS/FAIL with specific feedback and automatic retries. |
+| **No task management** | Work lives in your head or in ad-hoc prompts. | Kanban queue with status tracking. Tasks persist across sessions. |
+| **Lost decisions** | Why was this choice made? No record. | Append-only decision log. Every agent logs what it did and why. |
+| **No learned patterns** | Same mistakes repeat across sessions. | Lessons system. The swarm records what works and what to avoid. |
+
+The result: you give direction once, and a team of agents executes with structure, memory, and accountability.
+
 ## Quick Start
 
 1. **Enable agent teams** (already configured in `.claude/settings.json`):
