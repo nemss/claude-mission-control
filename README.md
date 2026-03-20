@@ -44,8 +44,8 @@ The result: you give direction once, and a team of agents executes with structur
 | Agent | Role | What it does |
 |-------|------|-------------|
 | **Overseer** | Coordinator | Breaks down tasks, manages queue, delegates. Never codes. |
-| **Builder** | Implementation | Kanban-driven. Picks tasks, writes code + tests, commits. |
-| **Researcher** | Analysis | Explores codebase, APIs, docs. Read-only. |
+| **Builder** | Implementation | Kanban-driven. Picks tasks, writes code + tests, stages for review. |
+| **Researcher** | Analysis | Explores codebase, APIs, docs. Outputs to findings/. |
 | **Writer** | Documentation | Creates and updates all documentation. |
 | **Oracle** | Quality Gate | Validates deliverables. PASS/FAIL with specific feedback. |
 | **Council** | Debate | Explorer (FOR) + Challenger (AGAINST) for better decisions. |
@@ -62,10 +62,12 @@ YOU → OVERSEER → BUILDER → ORACLE
 ```
 
 1. You give direction → Overseer plans (you approve)
-2. Builder picks from queue → implements → sends to review
-3. Oracle validates → PASS or FAIL with feedback
+2. Builder picks from queue → implements + tests → stages changes (git add)
+3. Oracle validates staged changes → PASS or FAIL with feedback
 4. On FAIL → Builder fixes → Oracle re-validates (max 3 retries)
-5. Overseer summarizes and reports
+5. On PASS → Overseer commits (atomic, conventional format) and reports
+
+**Fast-path:** For simple tasks, Overseer may skip planning and delegate directly to a single agent.
 
 ## Memory Layer
 
@@ -82,6 +84,16 @@ Every agent wakes up empty. But the system remembers everything.
   findings/          # Research outputs from Researcher
   content/           # Documentation drafts from Writer/Voice
 ```
+
+**What's in git:** `context.md`, `lessons/` — durable project knowledge that persists across clones.
+
+**Local-only (gitignored):** `decisions.jsonl`, `sessions/`, `briefs/`, `queue/`, `findings/`, `content/` — ephemeral per-machine state.
+
+**Task IDs:** The `.counter` file tracks the next task ID for the kanban queue.
+
+### Task Dependencies
+
+Tasks in the queue support `depends_on` to declare ordering. A task with dependencies stays blocked until its prerequisites reach DONE status.
 
 ### Context Recovery
 
@@ -102,6 +114,10 @@ Agents record durable patterns: what works, what to avoid. Searchable before eve
 | **task-wiring** | Create and manage kanban queue tasks |
 | **context-recovery** | Recover full context at session start |
 | **session-close** | Compress session into summary, extract lessons |
+| **daily-brief** | Generate daily activity summary |
+| **project-setup** | Initialize new project from template |
+| **create-role** | Guided creation of a new agent role |
+| **install-extension** | Install extension from git repo |
 
 ## Customization
 

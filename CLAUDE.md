@@ -8,7 +8,7 @@ Spec-driven multi-agent system with persistent memory, kanban task queue, and qu
 |-------|------|-------------|
 | `overseer` | Coordinator | Breaks down tasks, delegates, tracks progress. Never codes. Uses opus model. |
 | `builder` | Implementation | Kanban-driven. Picks tasks from queue, writes code + tests, sends to review. |
-| `researcher` | Analysis | Explores codebase, APIs, docs. Read-only, outputs to findings/. |
+| `researcher` | Analysis | Explores codebase, APIs, docs. Outputs to findings/. |
 | `writer` | Documentation | Writes and maintains all documentation. |
 | `oracle` | Quality Gate | Validates deliverables. PASS/FAIL verdicts. Builder-oracle loop is core pattern. |
 | `council-explorer` | Debate (FOR) | Argues for a proposal with evidence. |
@@ -98,7 +98,9 @@ The Overseer is the default agent (`"agent": "overseer"` in settings.json).
 
 **Phase 2 — Execution (automatic after approval):**
 4. Researcher (if needed) → gathers context, saves to findings/
-5. Builder → picks from queue, implements + tests, atomic commit
-6. Oracle → validates, PASS/FAIL with specific feedback
+5. Builder → picks from queue, implements + tests, stages changes (git add)
+6. Oracle → validates staged changes, PASS/FAIL with specific feedback
 7. On FAIL → Builder fixes with Oracle's feedback → Oracle re-validates (max 3)
-8. On PASS → Overseer updates context.md, reports to user
+8. On PASS → Overseer commits (atomic, conventional format), updates context.md, reports to user
+
+**Fast-path:** For simple tasks, Overseer may skip planning and delegate directly to a single agent.
