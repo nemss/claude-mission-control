@@ -21,7 +21,9 @@
       "Bash(make lint*)",
       "Bash(bash .claude/hooks/*)",
       "Bash(git add*)",
-      "Bash(git commit*)"
+      "Bash(git commit*)",
+      "Bash(git checkout*)",
+      "Bash(git restore*)"
     ],
     "deny": [
       "Bash(rm -rf *)",

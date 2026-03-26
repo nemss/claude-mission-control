@@ -7,7 +7,7 @@ Spec-driven multi-agent system with persistent memory, kanban task queue, and qu
 | Agent | Role | Description |
 |-------|------|-------------|
 | `overseer` | Coordinator | Breaks down tasks, delegates, tracks progress. Never codes. Uses opus model. |
-| `builder` | Implementation | Kanban-driven. Picks tasks from queue, writes code + tests, sends to review. |
+| `builder` | Implementation | Kanban-driven. Picks tasks from queue, writes code + tests, stages for review. Never commits. |
 | `researcher` | Analysis | Explores codebase, APIs, docs. Outputs to findings/. |
 | `writer` | Documentation | Writes and maintains all documentation. |
 | `oracle` | Quality Gate | Validates deliverables. PASS/FAIL verdicts. Builder-oracle loop is core pattern. |
@@ -42,7 +42,7 @@ Skill definitions: `.claude/skills/`
 3. **TDD**: Write tests alongside or before implementation.
 4. **Shared memory**: All agents log decisions to `decisions.jsonl`.
 5. **No guessing**: When in doubt, ask. Stop and clarify rather than assume.
-6. **Quality gates**: Oracle validates before a task is considered done.
+6. **Quality gates**: Oracle validates before a task is considered done (fast-path exempt for trivial changes).
 
 ## Security Trust Hierarchy
 
@@ -77,6 +77,7 @@ Location: `.claude/memory/shared/`
 | `stop.sh` | Stop | Auto-generate session summary |
 | `validate-task.sh` | TaskCompleted | Check tests pass, no unstaged files |
 | `on-idle.sh` | TeammateIdle | Suggest pending work from queue |
+| `health-check.sh` | Manual | Validates system integrity (dirs, files, agents, hooks) |
 
 ## Documentation
 

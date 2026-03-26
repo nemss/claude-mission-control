@@ -90,6 +90,7 @@ Each task file contains: instructions, acceptance criteria, handoff state, manag
 | `stop.sh` | Stop | Auto-generate session summary |
 | `validate-task.sh` | TaskCompleted | Check tests, unstaged files |
 | `on-idle.sh` | TeammateIdle | Suggest pending work from queue |
+| `health-check.sh` | Manual | Validates system integrity (dirs, files, agents, hooks) |
 
 ### Hook Failure Recovery
 

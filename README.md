@@ -44,7 +44,7 @@ The result: you give direction once, and a team of agents executes with structur
 | Agent | Role | What it does |
 |-------|------|-------------|
 | **Overseer** | Coordinator | Breaks down tasks, manages queue, delegates. Never codes. |
-| **Builder** | Implementation | Kanban-driven. Picks tasks, writes code + tests, stages for review. |
+| **Builder** | Implementation | Kanban-driven. Picks tasks, writes code + tests, stages for review. Never commits. |
 | **Researcher** | Analysis | Explores codebase, APIs, docs. Outputs to findings/. |
 | **Writer** | Documentation | Creates and updates all documentation. |
 | **Oracle** | Quality Gate | Validates deliverables. PASS/FAIL with specific feedback. |
@@ -181,7 +181,8 @@ Edit `.claude/docs/CONVENTIONS.md` for project-specific rules.
     │   ├── session-start.sh               # Context recovery on start
     │   ├── stop.sh                        # Session summary on stop
     │   ├── validate-task.sh               # Task completion validation
-    │   └── on-idle.sh                     # Idle work suggestion
+    │   ├── on-idle.sh                     # Idle work suggestion
+    │   └── health-check.sh               # System integrity check (manual)
     ├── templates/
     │   └── agent-template.md              # Boilerplate for new agents
     ├── extensions/                         # Installed extensions

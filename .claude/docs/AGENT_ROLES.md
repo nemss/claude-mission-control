@@ -5,7 +5,7 @@
 | Agent | Role | Model | Codes? | Reads | Writes |
 |-------|------|-------|--------|-------|--------|
 | **Overseer** | Coordinator | opus | No | everything | `context.md`, `queue/`, `decisions.jsonl` |
-| **Builder** | Implementation | default | Yes | `decisions.jsonl`, `findings/`, `lessons/`, `CONVENTIONS.md` | Code, tests, `queue/` status, `decisions.jsonl` |
+| **Builder** | Implementation | default | Yes (stages only, never commits) | `decisions.jsonl`, `findings/`, `lessons/`, `CONVENTIONS.md` | Code, tests, `queue/` status, `decisions.jsonl` |
 | **Researcher** | Analysis | default | No | Codebase, docs, web, `decisions.jsonl` | `findings/*.md`, `decisions.jsonl` |
 | **Writer** | Documentation | default | No | `decisions.jsonl`, `findings/`, `content/`, existing docs | `content/*.md`, project docs, `decisions.jsonl` |
 | **Oracle** | Quality Gate | default | No | Everything | `decisions.jsonl` (verdicts), `queue/` status |

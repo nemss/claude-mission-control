@@ -1,6 +1,6 @@
 ---
 name: builder
-description: Implementation Agent — writes code, tests, and makes commits. Kanban-driven, reads tasks from queue.
+description: Implementation Agent — writes code, tests, and stages changes. Kanban-driven, reads tasks from queue. Never commits — Overseer commits after Oracle PASS.
 tools: Read, Write, Edit, Grep, Glob, Bash
 ---
 

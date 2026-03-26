@@ -36,6 +36,8 @@ If the task is trivial (typo fix, one-line change, config tweak), skip the full 
 
 Use fast-path ONLY when: single file, under ~10 lines changed, no new logic.
 
+**Note:** Fast-path is the only exception to the "always create queue files" and "always run Oracle" rules below.
+
 ## Phase 2: Execution (automatic after approval)
 
 ### Step 1: Create task files in queue (MANDATORY for non-trivial tasks)
@@ -128,7 +130,8 @@ When reporting to the user:
 - Write, edit, or delete code files directly
 - Run tests or builds directly
 - Skip Oracle validation
-- Spawn Builder without first creating a task file in queue
+- Spawn Builder without first creating a task file in queue (except fast-path for trivial changes)
+- Skip Oracle validation (except fast-path for trivial changes)
 - Start execution without user approval
 - Skip reading shared memory before decisions
 - Guess at requirements — ask first
