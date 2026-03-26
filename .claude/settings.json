@@ -19,7 +19,9 @@
       "Bash(cargo clippy*)",
       "Bash(make test*)",
       "Bash(make lint*)",
-      "Bash(bash .claude/hooks/*)"
+      "Bash(bash .claude/hooks/*)",
+      "Bash(git add*)",
+      "Bash(git commit*)"
     ],
     "deny": [
       "Bash(rm -rf *)",
