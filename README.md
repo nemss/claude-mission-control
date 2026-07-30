@@ -141,12 +141,36 @@ See `.claude/docs/EXTENSIONS.md` for details.
 
 Edit `.claude/docs/CONVENTIONS.md` for project-specific rules.
 
+## Testing
+
+The hooks are the load-bearing automation here, so they have their own suite. It needs nothing
+beyond bash, coreutils, and git — no bats, no npm.
+
+```bash
+make test                              # or: bash .claude/hooks/tests/run-tests.sh
+make health                            # or: bash .claude/hooks/health-check.sh
+```
+
+`make test` covers all five hooks: context payload and `decisions.jsonl` rotation in
+`session-start.sh`, idempotent day-scoped summaries in `stop.sh`, the staging gate in
+`validate-task.sh`, work suggestions in `on-idle.sh`, and the integrity checks in
+`health-check.sh`. Exit code is non-zero if any assertion fails.
+
+Every test runs against a throwaway fixture project created with `mktemp -d` and addressed via
+`CLAUDE_PROJECT_DIR`, so the suite never touches this repo's own `.claude/memory/shared/` tree
+and leaves `git status` clean.
+
+`validate-task.sh` looks for a test runner and warns when it finds none. The `test:` target in
+the `Makefile` is what it detects, so the TaskCompleted quality gate runs this suite for real
+instead of passing by default.
+
 ## Project Structure
 
 ```
 .
 ├── CLAUDE.md                              # Main agent configuration
 ├── README.md                              # This file
+├── Makefile                               # make test / make health
 └── .claude/
     ├── settings.json                      # Permissions, hooks, env vars
     ├── agents/
@@ -182,7 +206,9 @@ Edit `.claude/docs/CONVENTIONS.md` for project-specific rules.
     │   ├── stop.sh                        # Session summary on stop
     │   ├── validate-task.sh               # Task completion validation
     │   ├── on-idle.sh                     # Idle work suggestion
-    │   └── health-check.sh               # System integrity check (manual)
+    │   ├── health-check.sh                # System integrity check (manual)
+    │   └── tests/
+    │       └── run-tests.sh               # Hook test suite (make test)
     ├── templates/
     │   └── agent-template.md              # Boilerplate for new agents
     ├── extensions/                         # Installed extensions
