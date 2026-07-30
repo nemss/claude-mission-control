@@ -29,12 +29,20 @@ Keep it under 50 lines. Compress, don't transcribe.
 
 ## Step 2: Extract Lessons
 
-If anything surprising or important happened, create a lesson in `.claude/memory/shared/lessons/`:
+If anything surprising or important happened, create a lesson at
+`.claude/memory/shared/lessons/L-NNN.json` — one JSON object per file.
 
-Find the next available ID: `ls lessons/ | wc -l` → L-{next number}
+The format and field set are specified in `.claude/docs/COMMUNICATION.md` ("Lessons"). Follow it
+there rather than copying it here.
 
-```json
-{"id":"L-NNN","severity":"critical|important|minor","pattern":"Do X / Avoid Y","context":"What happened that taught this","agent":"your-name","ts":"ISO-8601"}
+Allocate the ID as highest-existing + 1, never `ls | wc -l` — a count reuses the ID of any
+deleted lesson:
+
+```bash
+LESSONS_DIR=.claude/memory/shared/lessons
+MAX=$(ls "$LESSONS_DIR"/L-*.json 2>/dev/null | sed 's/.*L-\([0-9]*\)\.json/\1/' | sort -n | tail -1)
+# 10# forces base 10 — without it bash reads a zero-padded ID as octal (010 → 8, 008 → error)
+printf 'L-%03d\n' "$(( 10#${MAX:-0} + 1 ))"
 ```
 
 Only record **durable** lessons — patterns that apply to future work, not one-time fixes.

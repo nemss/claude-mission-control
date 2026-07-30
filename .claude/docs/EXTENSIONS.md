@@ -32,7 +32,7 @@ An extension is a git repository containing any combination of:
 | Directory | Contains | Installed To |
 |-----------|----------|-------------|
 | `agents/` | Agent role definitions (.md) | `.claude/agents/` |
-| `skills/` | Reusable playbooks (.md) | `.claude/skills/` |
+| `skills/` | Reusable playbooks (`<name>/SKILL.md`) | `.claude/skills/<name>/SKILL.md` |
 | `hooks/` | Hook scripts (.sh) | `.claude/hooks/` |
 | `docs/` | Documentation (.md) | `.claude/docs/` |
 
@@ -44,9 +44,11 @@ Use the `install-extension` skill or manually copy files.
 
 1. Create a new git repo
 2. Add agents, skills, hooks, or docs as needed
-3. Follow the agent template in `.claude/templates/agent-template.md`
-4. Follow security standards in `.claude/docs/SECURITY.md`
-5. Add a README explaining what the extension does
+3. Each skill is a directory holding a `SKILL.md` with `name` and `description` frontmatter,
+   where `name` matches the directory name — Claude Code loads skills only from that layout
+4. Follow the agent template in `.claude/templates/agent-template.md`
+5. Follow security standards in `.claude/docs/SECURITY.md`
+6. Add a README explaining what the extension does
 
 ## Principles
 

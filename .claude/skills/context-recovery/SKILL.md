@@ -32,7 +32,7 @@ Read all files in `.claude/memory/shared/queue/` where status is `todo`, `in-pro
 Note: your assigned tasks, their acceptance criteria, any handoff state.
 
 ### 5. Lessons
-Read all files in `.claude/memory/shared/lessons/`.
+Read every `.claude/memory/shared/lessons/L-NNN.json`.
 Pay special attention to `critical` severity lessons.
 
 ### 6. Current Context

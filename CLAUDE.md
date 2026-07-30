@@ -33,7 +33,7 @@ Agent definitions: `.claude/agents/` | Custom roles: `.claude/templates/agent-te
 | `create-role` | Guided creation of a new agent role |
 | `install-extension` | Install extension from git repo |
 
-Skill definitions: `.claude/skills/`
+Skill definitions: `.claude/skills/<skill-name>/SKILL.md`
 
 ## Rules
 

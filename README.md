@@ -159,17 +159,17 @@ Edit `.claude/docs/CONVENTIONS.md` for project-specific rules.
     │   ├── council-challenger.md          # Debate: argues AGAINST
     │   ├── historian.md                   # Narrative from git/decisions
     │   └── voice.md                       # Human communication
-    ├── skills/
-    │   ├── spec-planning.md               # 4-step spec system
-    │   ├── council-deliberation.md        # Two-agent debate
-    │   ├── builder-oracle-loop.md         # Core review loop
-    │   ├── task-wiring.md                 # Kanban task management
-    │   ├── context-recovery.md            # Session start recovery
-    │   ├── session-close.md               # Session end compression
-    │   ├── daily-brief.md                 # Daily summary generation
-    │   ├── project-setup.md               # New project initialization
-    │   ├── create-role.md                 # New agent role creation
-    │   └── install-extension.md           # Extension installation
+    ├── skills/                            # One directory per skill, each with a SKILL.md
+    │   ├── spec-planning/SKILL.md         # 4-step spec system
+    │   ├── council-deliberation/SKILL.md  # Two-agent debate
+    │   ├── builder-oracle-loop/SKILL.md   # Core review loop
+    │   ├── task-wiring/SKILL.md           # Kanban task management
+    │   ├── context-recovery/SKILL.md      # Session start recovery
+    │   ├── session-close/SKILL.md         # Session end compression
+    │   ├── daily-brief/SKILL.md           # Daily summary generation
+    │   ├── project-setup/SKILL.md         # New project initialization
+    │   ├── create-role/SKILL.md           # New agent role creation
+    │   └── install-extension/SKILL.md     # Extension installation
     ├── docs/
     │   ├── CONVENTIONS.md                 # Code style and commit rules
     │   ├── SECURITY.md                    # Trust hierarchy and scope guards

@@ -11,7 +11,9 @@ An extension is a git repo containing:
 ```
 my-extension/
   agents/          # Additional agent roles (.md files)
-  skills/          # Additional skills (.md files)
+  skills/          # Additional skills (one <name>/SKILL.md per skill)
+    my-skill/
+      SKILL.md
   hooks/           # Additional hook scripts (.sh files)
   docs/            # Extension documentation
   install.sh       # Installation script
@@ -39,8 +41,8 @@ Before installing, review:
 # Agents
 cp /tmp/extension-install/agents/*.md .claude/agents/
 
-# Skills
-cp /tmp/extension-install/skills/*.md .claude/skills/
+# Skills — copy whole directories; each must contain a SKILL.md
+cp -R /tmp/extension-install/skills/*/ .claude/skills/
 
 # Hooks (review carefully!)
 cp /tmp/extension-install/hooks/*.sh .claude/hooks/

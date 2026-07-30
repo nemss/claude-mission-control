@@ -54,7 +54,7 @@ YOU → OVERSEER → BUILDER → ORACLE
 | `context.md` | Markdown | Current project state (Overseer maintains) |
 | `queue/` | Markdown files | Kanban task queue with status tracking |
 | `sessions/` | Markdown files | Per-session compressed summaries |
-| `lessons/` | JSON files | Durable patterns the swarm has learned |
+| `lessons/` | `L-NNN.json` files | Durable patterns the swarm has learned (format: COMMUNICATION.md) |
 | `briefs/` | Markdown files | Daily activity summaries |
 | `findings/` | Markdown files | Research outputs |
 | `content/` | Markdown files | Documentation drafts |
@@ -114,6 +114,9 @@ When a hook exits with a non-zero code other than 2, the hook is treated as erro
 | `project-setup` | Initialize new project from template |
 | `create-role` | Create a new agent role |
 | `install-extension` | Install extension from git repo |
+
+Each skill lives at `.claude/skills/<skill-name>/SKILL.md` — Claude Code discovers skills only
+from that layout, and the `name` in the frontmatter must match the directory name.
 
 ## Extensions
 
